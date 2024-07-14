@@ -1,5 +1,7 @@
 import chai from 'chai';
 import RUT from '../functions';
+import { describe } from 'mocha';
+
 
 describe('Get the RUT Check Digit', () => {
   it('Testing 10766555 Should return 2', () => {
