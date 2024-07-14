@@ -96,21 +96,21 @@ describe('Validate RUT', () => {
   it('Testing 10766555-2 Should return true', () => {
     const rut = '10766555-2';
     const result = RUT.validate(rut);
-    chai.expect(result).to.equal(true);
+    chai.expect(result.payload).to.equal(true);
   });
   it('Testing 10766555-3 (bad check digit) Should return false', () => {
     const rut = '10766555-3';
     const result = RUT.validate(rut);
-    chai.expect(result).to.equal(false);
+    chai.expect(result.payload).to.equal(false);
   });
   it('Testing 10.766.555-2 Should return true', () => {
     const rut = '10.766.555-2';
     const result = RUT.validate(rut);
-    chai.expect(result).to.equal(true);
+    chai.expect(result.payload).to.equal(true);
   });
   it('Testing 107665552 (10766555-2) Should return true', () => {
     const rut = '107665552';
     const result = RUT.validate(rut);
-    chai.expect(result).to.equal(true);
+    chai.expect(result.payload).to.equal(true);
   });
 });

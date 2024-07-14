@@ -23,6 +23,11 @@ describe('Checking RUT char validation', () => {
     const result = RUT.hasInvalidChars(rut);
     chai.expect(result).to.equal(true);
   });
+  it('Check RUT with invalid chars 10766552-p Should return true', () => {
+    const rut = '10766552-p';
+    const result = RUT.hasInvalidChars(rut);
+    chai.expect(result).to.equal(true);
+  });
   it('Check RUT with valid chars 16.591.919-k Should return false', () => {
     const rut = '16.591.919-k';
     const result = RUT.hasInvalidChars(rut);

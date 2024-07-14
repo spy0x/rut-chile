@@ -1,13 +1,22 @@
-import { addDash, removeDots } from './utils';
+import { RUTResult } from './types';
+import { addDash, createResult, removeDots } from './utils';
 
 export default class RUT {
-  static validate(rut: string): boolean {
+  static validate(rut: string, debug = false): RUTResult {
     rut = removeDots(rut);
+    if (RUT.hasInvalidDash(rut)) return createResult('error', 'Invalid dash', false);
     rut = addDash(rut);
+    if (RUT.hasInvalidChars(rut)) return createResult('error', 'Invalid chars', false);
+    if (RUT.hasTooFewChars(rut)) return createResult('error', 'Too few chars', false);
+    if (RUT.hasTooManyChars(rut)) return createResult('error', 'Too many chars', false);
+    // if the rut is valid, the last digit should match the calculated one
     let tmp = rut.split('-');
     let digit = tmp[1];
     let rutWithoutDigit = tmp[0];
-    return RUT.getDigit(rutWithoutDigit) === digit.toLowerCase();
+    if (RUT.getDigit(rutWithoutDigit) === digit.toLowerCase()) return createResult('success', 'Valid RUT', true);
+    const result = createResult('error', 'Invalid check digit', false);
+    if (debug) console.log(result);
+    return result
   }
 
   static getDigit(rutWithoutDigit: string, toUpperCase = false): string {
