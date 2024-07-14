@@ -3,7 +3,7 @@ import { addDash, removeDots } from './utils';
 export default class RUT {
   static validate(rut: string): boolean {
     rut = removeDots(rut);
-    rut = rut.includes('-') ? rut : addDash(rut);
+    rut = addDash(rut);
     let tmp = rut.split('-');
     let digit = tmp[1];
     let rutWithoutDigit = tmp[0];
@@ -25,30 +25,39 @@ export default class RUT {
   }
 
   static deformat(rut: string, noDash = false): string {
-    rut = rut.includes('-') ? rut : addDash(rut);
+    rut = addDash(rut);
     return noDash ? rut.replace(/\./g, '').replace('-', '') : rut.replace(/\./g, '');
   }
 
   static hasTooFewChars(rut: string): boolean {
     rut = removeDots(rut);
-    rut = rut.includes('-') ? rut : addDash(rut);
+    rut = addDash(rut);
     return rut.length < 8;
   }
 
   static hasTooManyChars(rut: string): boolean {
     rut = removeDots(rut);
-    rut = rut.includes('-') ? rut : addDash(rut);
+    rut = addDash(rut);
     return rut.length > 10;
   }
 
   static hasInvalidChars(rut: string): boolean {
     rut = removeDots(rut);
-    rut = rut.includes('-') ? rut : addDash(rut);
+    rut = addDash(rut);
     const tmp = rut.split('-');
     // if there are chars in the first part of the RUT return true
     if (tmp[0].match(/[a-z]/i)) return true;
     // if there are chars in the second part of the RUT, except for k or K, return true
     if (tmp[1].match(/[a-jl-z]/i)) return true;
+    return false;
+  }
+
+  static hasInvalidDash(rut: string): boolean {
+    // if there are more than one dash return true
+    const tmp = rut.match(/-/g);
+    if (tmp && tmp.length > 1) return true;
+    // if theres a dash, return true if it's not in the right place
+    if (tmp && rut.charAt(rut.length - 2) !== '-') return true;
     return false;
   }
 }

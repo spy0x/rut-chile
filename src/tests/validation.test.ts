@@ -13,7 +13,7 @@ describe('Checking RUT char validation', () => {
     const result = RUT.hasTooManyChars(rut);
     chai.expect(result).to.equal(true);
   });
-  it ('Check good RUT 107665552 Should return false', () => {
+  it('Check good RUT 107665552 Should return false', () => {
     const rut = '107665552';
     const result = RUT.hasTooFewChars(rut);
     chai.expect(result).to.equal(false);
@@ -26,6 +26,26 @@ describe('Checking RUT char validation', () => {
   it('Check RUT with valid chars 16.591.919-k Should return false', () => {
     const rut = '16.591.919-k';
     const result = RUT.hasInvalidChars(rut);
+    chai.expect(result).to.equal(false);
+  });
+  it('Check RUT with invalid multiple dashes 1076655-5-2 Should return true', () => {
+    const rut = '1076655-5-2';
+    const result = RUT.hasInvalidDash(rut);
+    chai.expect(result).to.equal(true);
+  });
+  it('Check RUT with invalid dash position 1076655-52 Should return true', () => {
+    const rut = '1076655-52';
+    const result = RUT.hasInvalidDash(rut);
+    chai.expect(result).to.equal(true);
+  });
+  it('Check RUT with valid dash position 10766555-2 Should return false', () => {
+    const rut = '10766555-2';
+    const result = RUT.hasInvalidDash(rut);
+    chai.expect(result).to.equal(false);
+  });
+  it('Check RUT without dashes 107665552 Should return false', () => {
+    const rut = '107665552';
+    const result = RUT.hasInvalidDash(rut);
     chai.expect(result).to.equal(false);
   });
 });
