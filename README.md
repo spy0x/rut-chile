@@ -1,5 +1,6 @@
 # Rut-Chile
 ## Comprehensive RUT Validation and Utilities for JavaScript and TypeScript
+[![Node.js CI](https://github.com/spy0x/rut-chile/actions/workflows/main.yml/badge.svg?branch=main)](https://github.com/spy0x/rut-chile/actions/workflows/main.yml)
 
 **Rut-Chile** is a comprehensive package for working with Chilean RUTs (Rol Único Tributario) in JavaScript and TypeScript. It provides a robust validation mechanism that goes beyond the standard verification digit check, ensuring the RUT adheres to all structural and format requirements. Additionally, it offers versatile formatting and de-formatting functionalities with control over case sensitivity and hyphen.
 
@@ -30,7 +31,7 @@ npm install rut-chile
 ```
 
 ### **Usage:**
-#### `validate()` and `validateWithResponse()` 
+#### `validate(rut: string): boolean` and `validateWithResponse(rut: string): RUTResult` 
 > These methods validate a Chilean RUT (Rol Único Tributario). Checks for invalid characters, spaces or improper length. And finally check if the verification digit is valid. All-in-One RUT validation!
 
 ```javascript
@@ -53,9 +54,9 @@ console.log(RUT.validate(badRut)) // Output: false
 console.log(RUT.validateWithResponse(badRut)) // RUTResult Object Output: { status: error, message: 'Invalid check digit', payload: false}
 ```
 
-#### `getDigit()`
+#### `getDigit(rutWithoutDigit: string, toUppercase = false): string`
 
-> Returns a RUT verification digit. Can be returned with uppercase in case of 'k', if desired. Note: it does not check for invalid characters.
+> Returns a RUT verification digit. Can be returned with uppercase in case of 'k' if desired. Note: it does not check for invalid characters.
 ```javascript
 import RUT from 'rut-chile';
 
@@ -69,3 +70,41 @@ const rutWithoutDigit = '10766555';
 console.log(RUT.getDigit(rutWithoutDigit)) // Output: k
 console.log(RUT.getDigit(rutWithoutDigit, true)) // Output: K
 ```
+
+#### `checkDigit(rut: string): boolean`
+
+> Returns a boolean indicating whether the check digit is valid or not. Note: it does not check for invalid characters.
+```javascript
+import RUT from 'rut-chile';
+
+const rut = '10766555-k';
+
+// Rut-Chile also accepts RUTs in these formats:
+// 10.766.555-k (Dotted format)
+// 10,766,555-k (Comma format)
+// 10766555k (Unformatted)
+
+console.log(RUT.checkDigit(rut)) // Output: true
+
+const badRut = '10766555-3'; // bad verification digit
+console.log(RUT.checkDigit(badRut)) // Output: false
+```
+
+#### `format(rut: string, withComma = false, toUpperCase = false): string`
+
+> Returns the formatted RUT number with dots and dash. Can be returned with comma and uppercase if desired too.
+```javascript
+import RUT from 'rut-chile';
+
+const rut = '10766555k';
+
+// Rut-Chile also accepts RUTs in these formats:
+// 10.766.555-k (Dotted format)
+// 10,766,555-k (Comma format)
+// 10766555-k (Unformatted, only with dash)
+
+console.log(RUT.format(rut)) // Output: 10.766.555-k
+console.log(RUT.format(rut, true, true)) // Output: 10,766,555-K
+
+```
+

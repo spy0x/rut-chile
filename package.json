@@ -5,15 +5,35 @@
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/spy0x/rut-chile.git"
+  },
+  "homepage": "https://github.com/spy0x/rut-chile#readme",
   "scripts": {
     "build": "tsup",
     "test": "npm run build && mocha -r ts-node/register './src/tests/**/*.ts'"
   },
   "keywords": [
     "chile",
-    "rut"
+    "rut",
+    "chilean rut",
+    "rut chileno",
+    "rut chile",
+    "rut validation",
+    "rut verification",
+    "rut calculator",
+    "rut check digit",
+    "rut format",
+    "rut data"
   ],
-  "author": "spy0x",
+  "author": {
+    "name": "spy0x",
+    "email": "spy0x@hotmail.com"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
   "license": "MIT",
   "devDependencies": {
     "@types/chai": "^4.3.16",
