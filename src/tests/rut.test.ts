@@ -1,5 +1,5 @@
 import chai from 'chai';
-import RUT from '../functions';
+import RUT from '../index';
 import { describe } from 'mocha';
 
 

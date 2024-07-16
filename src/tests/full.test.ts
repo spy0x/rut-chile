@@ -1,5 +1,5 @@
 import { describe } from 'mocha';
-import RUT from '../functions';
+import RUT from '../index';
 import chai from 'chai';
 
 describe('Full test with a single RUT sample testing all the methods', () => {
