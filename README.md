@@ -30,7 +30,8 @@
 npm install rut-chile
 ```
 
-### **Usage:**
+## **Usage:**
+
 #### `validate(rut: string): boolean` and `validateWithResponse(rut: string): RUTResult` 
 > These methods validate a Chilean RUT (Rol Único Tributario). Checks for invalid characters, spaces or improper length. And finally check if the verification digit is valid. All-in-One RUT validation!
 
@@ -125,7 +126,7 @@ console.log(RUT.deformat(rut, true)) // Output: 16591919k
 console.log(RUT.deformat(rut, true, true)) // Output: 16591919K
 ```
 
-### Individual Validations:
+## Individual Validations:
 
 #### `hasTooFewChars(rut: string): boolean`
 
