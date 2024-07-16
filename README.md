@@ -60,12 +60,12 @@ console.log(RUT.validateWithResponse(badRut)) // RUTResult Object Output: { stat
 ```javascript
 import RUT from 'rut-chile';
 
-const rutWithoutDigit = '10766555';
+const rutWithoutDigit = '16591919';
 
 // Rut-Chile also accepts RUTs in these formats:
-// 10.766.555 (Dotted format)
-// 10,766,555 (Comma format)
-// 10766555 (Unformatted)
+// 16.591.919 (Dotted format)
+// 16,591,919 (Comma format)
+// 16591919 (Unformatted)
 
 console.log(RUT.getDigit(rutWithoutDigit)) // Output: k
 console.log(RUT.getDigit(rutWithoutDigit, true)) // Output: K
@@ -77,12 +77,13 @@ console.log(RUT.getDigit(rutWithoutDigit, true)) // Output: K
 ```javascript
 import RUT from 'rut-chile';
 
-const rut = '10766555-k';
+const rut = '10766555-2';
 
 // Rut-Chile also accepts RUTs in these formats:
-// 10.766.555-k (Dotted format)
-// 10,766,555-k (Comma format)
-// 10766555k (Unformatted)
+// 10.766.555-2 (Dotted format)
+// 10,766,555-2 (Comma format)
+// 107665552 (Unformatted)
+// Accepts lower and uppercase in case of 'k'
 
 console.log(RUT.checkDigit(rut)) // Output: true
 
@@ -92,19 +93,129 @@ console.log(RUT.checkDigit(badRut)) // Output: false
 
 #### `format(rut: string, withComma = false, toUpperCase = false): string`
 
-> Returns the formatted RUT number with dots and dash. Can be returned with comma and uppercase if desired too.
+> Returns the formatted RUT number with dots and dash. Can be returned with comma and uppercase if desired too. Note: it does not check for invalid characters.
 ```javascript
 import RUT from 'rut-chile';
 
-const rut = '10766555k';
+const rut = '16591919k';
 
 // Rut-Chile also accepts RUTs in these formats:
-// 10.766.555-k (Dotted format)
-// 10,766,555-k (Comma format)
-// 10766555-k (Unformatted, only with dash)
+// 16591919-k (Unformatted, only with dash)
+// Accepts lowercase and uppercase in case of 'k'
 
-console.log(RUT.format(rut)) // Output: 10.766.555-k
-console.log(RUT.format(rut, true, true)) // Output: 10,766,555-K
-
+console.log(RUT.format(rut)) // Output: 16.591.919-k
+console.log(RUT.format(rut, true)) // Output: 16,591,919-k
+console.log(RUT.format(rut, true, true)) // Output: 16,591,919-K
 ```
 
+#### `deformat(rut: string, noDash = false, toUpperCase = false): string`
+
+> Returns the RUT number without dots or commas. Can be returned without dash and with uppercase if desired too. Note: it does not check for invalid characters.
+```javascript
+import RUT from 'rut-chile';
+
+const rut = '16.591.919-k';
+
+// Rut-Chile also accepts RUTs in these formats:
+// 16,591,919-k (Comma format)
+// Accepts lowercase or uppercase in case of 'k'.
+
+console.log(RUT.deformat(rut)) // Output: 16591919-k
+console.log(RUT.deformat(rut, true)) // Output: 16591919k
+console.log(RUT.deformat(rut, true, true)) // Output: 16591919K
+```
+
+### Individual Validations:
+
+#### `hasTooFewChars(rut: string): boolean`
+
+> Returns true if the RUT has too few characters, false otherwise. 
+```javascript
+import RUT from 'rut-chile';
+
+const rut = '46555-5';
+
+// Rut-Chile also accepts RUTs in these formats:
+// 46.555-5 (Dotted format)
+// 46,555-5 (Comma format)
+// 465555 (Unformatted, without separators and without hyphen)
+// Accepts lowercase or uppercase for RUTs with 'k'.
+
+console.log(RUT.hasTooFewChars(rut)) // Output: true
+```
+
+#### `hasTooManyChars(rut: string): boolean`
+
+> Returns true if the RUT has too many characters, false otherwise.
+```javascript
+import RUT from 'rut-chile';
+
+const rut = '107665555-5';
+
+// Rut-Chile also accepts RUTs in these formats:
+// 107.665.555-5 (Dotted format)
+// 107,665,555-5 (Comma format)
+// 1076655555 (Unformatted, without separators and without hyphen)
+// Accepts lowercase or uppercase for RUTs with 'k'.
+
+console.log(RUT.hasTooManyChars(rut)) // Output: true
+```
+
+#### `hasInvalidChars(rut: string): boolean`
+
+> Returns true if the RUT has invalid characters, false otherwise.
+```javascript
+import RUT from 'rut-chile';
+
+const rut = '17665555-5';
+
+// Rut-Chile also accepts RUTs in these formats:
+// 17.665.555-5 (Dotted format)
+// 17,665,555-5 (Comma format)
+// 176655555 (Unformatted, without separators and without hyphen)
+// Accepts lowercase or uppercase for RUTs with 'k'.
+
+console.log(RUT.hasInvalidChars(rut)) // Output: false
+
+const badRut = '1766555a-5';
+console.log(RUT.hasInvalidChars(badRut)) // Output: true
+```
+
+#### `hasInvalidDash(rut: string): boolean`
+
+> Returns true if the RUT has invalid dash, false otherwise.
+```javascript
+import RUT from 'rut-chile';
+
+const rut = '17665555-5';
+
+// Rut-Chile also accepts RUTs in these formats:
+// 17.665.555-5 (Dotted format)
+// 17,665,555-5 (Comma format)
+// Accepts lowercase or uppercase for RUTs with 'k'.
+
+console.log(RUT.hasInvalidDash(rut)) // Output: false
+
+const badRut = '1766555-55';
+console.log(RUT.hasInvalidChars(badRut)) // Output: true
+```
+
+#### `hasSpaces(rut: string): boolean`
+
+> Returns true if the RUT has invalid spaces, false otherwise.
+```javascript
+import RUT from 'rut-chile';
+
+const rut = '17665555-5';
+
+// Rut-Chile also accepts RUTs in these formats:
+// 17.665.555-5 (Dotted format)
+// 17,665,555-5 (Comma format)
+// 176655555 (Unformatted, without separators and without hyphen)
+// Accepts lowercase or uppercase for RUTs with 'k'.
+
+console.log(RUT.hasSpaces(rut)) // Output: false
+
+const badRut = '17 665555-5';
+console.log(RUT.hasSpaces(badRut)) // Output: true
+```
