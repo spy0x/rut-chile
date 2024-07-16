@@ -33,6 +33,16 @@ describe('Checking RUT char validation', () => {
     const result = RUT.hasInvalidChars(rut);
     chai.expect(result).to.equal(false);
   });
+  it('Check RUT with invalid chars 16.*91.919-k Should return true', () => {
+    const rut = '16.*91.919-k';
+    const result = RUT.hasInvalidChars(rut);
+    chai.expect(result).to.equal(true);
+  });
+  it('Check RUT with invalid chars 16.591.919-! Should return true', () => {
+    const rut = '16.591.919-!';
+    const result = RUT.hasInvalidChars(rut);
+    chai.expect(result).to.equal(true);
+  });
   it('Check RUT with invalid multiple dashes 1076655-5-2 Should return true', () => {
     const rut = '1076655-5-2';
     const result = RUT.hasInvalidDash(rut);

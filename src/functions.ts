@@ -122,11 +122,12 @@ export default class RUT {
    */
   static hasInvalidChars(rut: string): boolean {
     rut = removeExtraChars(rut);
-    // if there are chars in the first part of the RUT return true
-    const tmp = rut.substring(0, rut.length - 1);
-    if (tmp.match(/[a-z]/i)) return true;
-    // check if the last char of rut is a letter, unless it is 'k' or 'K'
-    if (rut.charAt(rut.length - 1).match(/[a-jl-z]/i)) return true;
+    // if not a number in the first part of the RUT return true
+    const rutWithoutDigit = rut.substring(0, rut.length - 1);
+    if (rutWithoutDigit.match(/\D/g)) return true;
+    // check if the last char is not a number (unless it is k or K)
+    const digit = rut.charAt(rut.length - 1);
+    if (digit.match(/\D/g) && !digit.match(/[kK]/)) return true;
     return false;
   }
 
