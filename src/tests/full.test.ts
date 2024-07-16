@@ -30,6 +30,10 @@ describe('Full test with a single RUT sample testing all the methods', () => {
   });
   it('Validate the RUT 10.766.555-2 Should return true', () => {
     const result = RUT.validate(rut);
+    chai.expect(result).to.equal(true);
+  });
+  it('Validate the RUT 10.766.555-2 Should return true', () => {
+    const result = RUT.validateWithResponse(rut);
     chai.expect(result.payload).to.equal(true);
   });
   it('Deformat the RUT 10.766.555-2 Should return 10766555-2', () => {

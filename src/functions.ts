@@ -1,22 +1,31 @@
 import { RUTResult } from './types';
-import { addDash, createResult, removeDots } from './utils';
+import { addDash, createResult, removeExtraChars } from './utils';
 
 export default class RUT {
-  static validate(rut: string, debug = false): RUTResult {
-    rut = removeDots(rut);
+  static validate(rut: string, debug = false): boolean {
+    if (RUT.hasSpaces(rut)) return false;
+    if (RUT.hasInvalidDash(rut)) return false;
+    rut = removeExtraChars(rut);
+
+    if (RUT.hasInvalidChars(rut)) return false;
+    if (RUT.hasTooFewChars(rut)) return false;
+    if (RUT.hasTooManyChars(rut)) return false;
+
+    if (RUT.checkDigit(rut)) return true;
+    return false;
+  }
+
+  static validateWithResponse(rut: string): RUTResult {
+    if (RUT.hasSpaces(rut)) createResult('error', 'Has spaces', false);
     if (RUT.hasInvalidDash(rut)) return createResult('error', 'Invalid dash', false);
-    rut = addDash(rut);
+    rut = removeExtraChars(rut);
+
     if (RUT.hasInvalidChars(rut)) return createResult('error', 'Invalid chars', false);
     if (RUT.hasTooFewChars(rut)) return createResult('error', 'Too few chars', false);
     if (RUT.hasTooManyChars(rut)) return createResult('error', 'Too many chars', false);
-    // if the rut is valid, the last digit should match the calculated one
-    let tmp = rut.split('-');
-    let digit = tmp[1];
-    let rutWithoutDigit = tmp[0];
-    if (RUT.getDigit(rutWithoutDigit) === digit.toLowerCase()) return createResult('success', 'Valid RUT', true);
-    const result = createResult('error', 'Invalid check digit', false);
-    if (debug) console.log(result);
-    return result
+
+    if (RUT.checkDigit(rut)) return createResult('success', 'Valid RUT', true);
+    return createResult('error', 'Invalid check digit', false);
   }
 
   static getDigit(rutWithoutDigit: string, toUpperCase = false): string {
@@ -28,36 +37,40 @@ export default class RUT {
     return S ? String(S - 1) : toUpperCase ? 'K' : 'k';
   }
 
-  static format(rut: string): string {
-    rut = removeDots(rut);
-    return rut.replace(/^(\d{1,3})(\d{3})(\d{3})([0-9kK]{1})$/, '$1.$2.$3-$4');
+  static checkDigit(rut: string): boolean {
+    rut = removeExtraChars(rut);
+    const rutWithoutDigit = rut.substring(0, rut.length - 1);
+    const digit = rut.charAt(rut.length - 1);
+    return RUT.getDigit(rutWithoutDigit) === digit.toLowerCase();
+  }
+
+  static format(rut: string, withComma = false): string {
+    rut = removeExtraChars(rut);
+    return withComma ? rut.replace(/^(\d{1,3})(\d{3})(\d{3})([0-9kK]{1})$/, '$1,$2,$3-$4') : rut.replace(/^(\d{1,3})(\d{3})(\d{3})([0-9kK]{1})$/, '$1.$2.$3-$4');
   }
 
   static deformat(rut: string, noDash = false): string {
-    rut = addDash(rut);
-    return noDash ? rut.replace(/\./g, '').replace('-', '') : rut.replace(/\./g, '');
+    rut = removeExtraChars(rut);
+    return noDash ? rut : addDash(rut);
   }
 
   static hasTooFewChars(rut: string): boolean {
-    rut = removeDots(rut);
-    rut = addDash(rut);
-    return rut.length < 8;
+    rut = removeExtraChars(rut);
+    return rut.length < 7;
   }
 
   static hasTooManyChars(rut: string): boolean {
-    rut = removeDots(rut);
-    rut = addDash(rut);
-    return rut.length > 10;
+    rut = removeExtraChars(rut);
+    return rut.length > 9;
   }
 
   static hasInvalidChars(rut: string): boolean {
-    rut = removeDots(rut);
-    rut = addDash(rut);
-    const tmp = rut.split('-');
+    rut = removeExtraChars(rut);
     // if there are chars in the first part of the RUT return true
-    if (tmp[0].match(/[a-z]/i)) return true;
-    // if there are chars in the second part of the RUT, except for k or K, return true
-    if (tmp[1].match(/[a-jl-z]/i)) return true;
+    const tmp = rut.substring(0, rut.length - 1);
+    if (tmp.match(/[a-z]/i)) return true;
+    // check if the last char of rut is a letter, unless it is 'k' or 'K'
+    if (rut.charAt(rut.length - 1).match(/[a-jl-z]/i)) return true;
     return false;
   }
 
@@ -68,5 +81,9 @@ export default class RUT {
     // if theres a dash, return true if it's not in the right place
     if (tmp && rut.charAt(rut.length - 2) !== '-') return true;
     return false;
+  }
+
+  static hasSpaces(rut: string): boolean {
+    return rut.match(/\s/g) ? true : false;
   }
 }

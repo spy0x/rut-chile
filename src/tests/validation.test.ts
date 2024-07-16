@@ -53,4 +53,9 @@ describe('Checking RUT char validation', () => {
     const result = RUT.hasInvalidDash(rut);
     chai.expect(result).to.equal(false);
   });
+  it('Check RUT with spaces 10766555 2 Should return true', () => {
+    const rut = '10766555 2';
+    const result = RUT.hasSpaces(rut);
+    chai.expect(result).to.equal(true);
+  });
 });

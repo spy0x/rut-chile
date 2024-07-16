@@ -52,6 +52,11 @@ describe('Format RUT', () => {
     const result = RUT.format(rut);
     chai.expect(result).to.equal('16.591.919-k');
   });
+  it('Testing format 107665552 with comma Should return 10,766,555-2', () => {
+    const rut = '107665552';
+    const result = RUT.format(rut, true);
+    chai.expect(result).to.equal('10,766,555-2');
+  });
 });
 
 describe('Deformat RUT', () => {
@@ -92,25 +97,73 @@ describe('Deformat RUT', () => {
   });
 });
 
+describe('Check RUT Digit', () => {
+  it('Testing 107665552 Should return true', () => {
+    const rut = '107665552';
+    const result = RUT.checkDigit(rut);
+    chai.expect(result).to.equal(true);
+  });
+  it('Testing 16591919k Should return true', () => {
+    const rut = '16591919k';
+    const result = RUT.checkDigit(rut);
+    chai.expect(result).to.equal(true);
+  });
+  it('Testing 16.591.919-k Should return true', () => {
+    const rut = '16.591.919-k';
+    const result = RUT.checkDigit(rut);
+    chai.expect(result).to.equal(true);
+  });
+  it('Testing 16591919k (bad check digit) Should return false', () => {
+    const rut = '16591919k';
+    const result = RUT.checkDigit(rut);
+    chai.expect(result).to.equal(true);
+  });
+  it('Testing 10766555-2 Should return true', () => {
+    const rut = '10766555-2';
+    const result = RUT.checkDigit(rut);
+    chai.expect(result).to.equal(true);
+  });
+});
+
 describe('Validate RUT', () => {
   it('Testing 10766555-2 Should return true', () => {
     const rut = '10766555-2';
     const result = RUT.validate(rut);
+    chai.expect(result).to.equal(true);
+  });
+  it('Testing 10766555-2 Should return true', () => {
+    const rut = '10766555-2';
+    const result = RUT.validateWithResponse(rut);
     chai.expect(result.payload).to.equal(true);
   });
   it('Testing 10766555-3 (bad check digit) Should return false', () => {
     const rut = '10766555-3';
     const result = RUT.validate(rut);
+    chai.expect(result).to.equal(false);
+  });
+  it('Testing 10766555-3 (bad check digit) Should return false', () => {
+    const rut = '10766555-3';
+    const result = RUT.validateWithResponse(rut);
     chai.expect(result.payload).to.equal(false);
   });
   it('Testing 10.766.555-2 Should return true', () => {
     const rut = '10.766.555-2';
     const result = RUT.validate(rut);
+    chai.expect(result).to.equal(true);
+  });
+  it('Testing 10.766.555-2 Should return true', () => {
+    const rut = '10.766.555-2';
+    const result = RUT.validateWithResponse(rut);
     chai.expect(result.payload).to.equal(true);
   });
   it('Testing 107665552 (10766555-2) Should return true', () => {
     const rut = '107665552';
     const result = RUT.validate(rut);
+    chai.expect(result).to.equal(true);
+  });
+  it('Testing 107665552 (10766555-2) Should return true', () => {
+    const rut = '107665552';
+    const result = RUT.validateWithResponse(rut);
     chai.expect(result.payload).to.equal(true);
   });
 });
