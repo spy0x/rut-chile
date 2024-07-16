@@ -113,13 +113,18 @@ describe('Check RUT Digit', () => {
     const result = RUT.checkDigit(rut);
     chai.expect(result).to.equal(true);
   });
-  it('Testing 16591919k (bad check digit) Should return false', () => {
-    const rut = '16591919k';
+  it('Testing 165919194 (bad check digit) Should return false', () => {
+    const rut = '165919194';
     const result = RUT.checkDigit(rut);
-    chai.expect(result).to.equal(true);
+    chai.expect(result).to.equal(false);
   });
   it('Testing 10766555-2 Should return true', () => {
     const rut = '10766555-2';
+    const result = RUT.checkDigit(rut);
+    chai.expect(result).to.equal(true);
+  });
+  it('Testing 69714991-0 Should return true', () => {
+    const rut = '69714991-0';
     const result = RUT.checkDigit(rut);
     chai.expect(result).to.equal(true);
   });

@@ -2,7 +2,12 @@ import { RUTResult } from './types';
 import { addDash, createResult, removeExtraChars } from './utils';
 
 export default class RUT {
-  static validate(rut: string, debug = false): boolean {
+  /**
+   * Validates a Chilean RUT (Rol Único Tributario) number.
+   * @param rut - The RUT number to validate.
+   * @returns true if the RUT is valid, false otherwise.
+   */
+  static validate(rut: string): boolean {
     if (RUT.hasSpaces(rut)) return false;
     if (RUT.hasInvalidDash(rut)) return false;
     rut = removeExtraChars(rut);
@@ -44,13 +49,15 @@ export default class RUT {
     return RUT.getDigit(rutWithoutDigit) === digit.toLowerCase();
   }
 
-  static format(rut: string, withComma = false): string {
+  static format(rut: string, withComma = false, toUpperCase = false): string {
     rut = removeExtraChars(rut);
+    rut = toUpperCase ? rut.toUpperCase() : rut.toLowerCase();
     return withComma ? rut.replace(/^(\d{1,3})(\d{3})(\d{3})([0-9kK]{1})$/, '$1,$2,$3-$4') : rut.replace(/^(\d{1,3})(\d{3})(\d{3})([0-9kK]{1})$/, '$1.$2.$3-$4');
   }
 
-  static deformat(rut: string, noDash = false): string {
+  static deformat(rut: string, noDash = false, toUpperCase = false): string {
     rut = removeExtraChars(rut);
+    rut = toUpperCase ? rut.toUpperCase() : rut.toLowerCase();
     return noDash ? rut : addDash(rut);
   }
 
