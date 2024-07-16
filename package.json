@@ -1,6 +1,7 @@
 {
   "name": "rut-chile",
-  "version": "1.0.2",
+  "version": "1.0.3",
+  "private": "true",
   "description": "Comprehensive Chilean RUT validation and verification toolkit for JavaScript and TypeScript. Easily validate RUT format, calculate check digits, and ensure data accuracy in your applications.",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
