@@ -19,6 +19,11 @@ describe('Get the RUT Check Digit', () => {
     const result = RUT.getDigit(rut);
     chai.expect(result).to.equal('k');
   });
+  it('Testing 16,591,919 Should return k', () => {
+    const rut = '16,591,919';
+    const result = RUT.getDigit(rut);
+    chai.expect(result).to.equal('k');
+  });
   it('Testing 16.591.919-k Should return the same k', () => {
     const rut = '16.591.919-k';
     const result = RUT.getDigit(rut);
